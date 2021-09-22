@@ -14,7 +14,6 @@ S -> N X
 
 
 NP -> Det N
-
 S -> V NP
 S -> Aux N V NP
 S -> N V N NP

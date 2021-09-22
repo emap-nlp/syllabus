@@ -104,6 +104,13 @@ Monitoria: Sexta 14:20 - 16:20 (@yfaria)
   1. gramaticas para analise de textos, http://delph-in.github.io/delphin-viz/demo/
   2. dataset / treebank, http://lindat.mff.cuni.cz/services/udpipe/
   3. dataset/treebank para inferir uma gramática, +/- https://yoavartzi.com/tutorial/
+
+* aula 12 <2021-09-22 Wed>
+
+  1. revisão das últimas aulas sobre análises sintáticas (capítulos 12, 13 e 14)
+  2. constituintes vs dependencias
+  3. Dependencias Universais: motivações, guidelines, treebanks (corpora) e ferramentas
+     
   
 * Referencias
 
