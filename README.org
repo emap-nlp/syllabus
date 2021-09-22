@@ -99,6 +99,11 @@ Monitoria: Sexta 14:20 - 16:20 (@yfaria)
   - sobre parsing https://youtu.be/bxpc9Pp5pZM antecipando discussão sobre algoritmos
   - https://youtu.be/pF0RgB1dZTU sobre constituintes
 
+* aula 11 <2021-09-08 Wed>
+
+  1. gramaticas para analise de textos, http://delph-in.github.io/delphin-viz/demo/
+  2. dataset / treebank, http://lindat.mff.cuni.cz/services/udpipe/
+  3. dataset/treebank para inferir uma gramática, +/- https://yoavartzi.com/tutorial/
   
 * Referencias
 
