@@ -1,0 +1,21 @@
+
+S -> V Det N
+S -> Aux N V Det N
+S -> N V N Det N
+S -> N V Det N
+
+
+X -> V Det N
+
+S -> X
+S -> Aux N X
+S -> N V N Det N
+S -> N X
+
+
+NP -> Det N
+
+S -> V NP
+S -> Aux N V NP
+S -> N V N NP
+S -> N V NP
