@@ -7,6 +7,10 @@ https://github.com/emap-nlp
   
 Monitoria: Sexta 14:20 - 16:20 (@yfaria)
 
+* Forum
+
+  https://github.com/orgs/emap-nlp/teams/students
+
 * aula 1 <2021-08-02 Mon>
 
   - https://www.cl.cam.ac.uk/teaching/1920/NLP/slides/slides1.pdf
@@ -110,7 +114,22 @@ Monitoria: Sexta 14:20 - 16:20 (@yfaria)
   1. revisão das últimas aulas sobre análises sintáticas (capítulos 12, 13 e 14)
   2. constituintes vs dependencias
   3. Dependencias Universais: motivações, guidelines, treebanks (corpora) e ferramentas
-     
+
+* aula 13 <2021-09-27 Mon>
+
+  1. revisão dependencias universais
+  2. manutenção de datasets
+  3. algorítmo de parsing para dependencias
+  4. [[https://web.stanford.edu/~jurafsky/slp3/14.pdf][capítulo 14]] e [[https://www.cl.cam.ac.uk/teaching/1920/NLP/slides/slides5.pdf][slides 5]]
+
+
+* aula 14 <2021-09-29 Wed>
+
+  - semantica
+  - https://www.youtube.com/watch?v=-e4GaKSCrhM
+  - https://brenocon.com/watson_special_issue/03%20Deep%20parsing.pdf
+      
+
   
 * Referencias
 
