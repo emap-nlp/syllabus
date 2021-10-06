@@ -1,0 +1,786 @@
+
+% 01-prologue/slides.tex, v. 1 (21/12/12)
+% companion files to "Language and Computers"
+% Dickinson, Brew, & Meurers (2013)
+
+\documentclass{beamer}
+
+% \usepackage{../styles/lgcomp}
+\usepackage{graphicx}
+\usepackage{forest,adjustbox}
+\useforestlibrary{linguistics}
+\forestapplylibrarydefaults{linguistics}
+\usepackage{mrs}
+\usepackage{avm}
+
+\title{Introduction to Natural Language Processing}
+\author[]{Alexandre Rademaker}
+\institute{FGV EMAp}
+
+\newcommand{\pred}[1]{{\mbox{#1}'}}
+\newcommand{\qeq}{$=_q$ }
+\newcommand{\newterm}[1]{{\alert{#1}}}
+\newcommand{\egtext}[1]{{\color[rgb]{0,0.7,0} #1}}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan}
+
+
+\begin{document}
+
+\begin{frame}
+  \maketitle
+\end{frame}
+
+\section{Overview}
+
+\begin{frame}
+\frametitle{Overview}
+\begin{itemize}
+	\item Formal semantics, FOL, lambda-calculus
+	\item Compositional semantics
+	\item Semantics in computational linguistics
+	\item Semantics in NLP
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Parsing makes explicit inherent structure. So, does this tree represent meaning?}
+\begin{forest}
+	[S[NP[Kim]][VP[V[adores]][NP[N[snow]][PP[P[in]][NP[Oslo]]]]]]
+	\end{forest}
+\end{frame}
+
+\begin{frame}
+\frametitle{Why represent meaning computationally?}
+{\it I hated this movie!}
+
+\vspace{2cm}
+
+\begin{itemize}
+	\item A Dialog system:
+	\begin{itemize}
+		\item Parser:
+		\begin{itemize}
+			\item Yes, it is grammatical!
+			\item Here's the structure!
+		\end{itemize}
+	\item System: Great, but what am I supposed to DO?
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Formal semantics question:}
+{\bf How could we put this tree in correspondence to a model of the world?}
+
+\begin{forest}
+	[S[NP[Kim]][VP[V[adores]][NP[N[snow]][PP[P[in]][NP[Oslo]]]]]]
+\end{forest}
+\end{frame}
+
+\section{Model theoretic semantics}
+\begin{frame}
+\frametitle{Model theoretic semantics}
+\begin{itemize}
+	\item Create a model of the world consisting of elements, sets of elements, and relations
+	\begin{itemize}
+	\item not so much a model of what things {\bf mean} as of {\bf how we reason} about them
+	\end{itemize}
+	\item Create an interpretation function which maps linguistic elements (parts of the semantic structure) to parts of the model
+	\item Simple propositions are interpreted by checking their truth in the model
+	\item Define semantics for ``logical vocabulary'': and, or, not, if, every, some...
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Model theoretic semantics (example)}
+\includegraphics[width=\textwidth]{figures/cats1}
+\end{frame}
+
+\begin{frame}
+\frametitle{Model theoretic semantics (denotations)}
+\includegraphics[width=\textwidth]{figures/cats2}
+\end{frame}
+
+\begin{frame}
+\frametitle{Logical vocabulary gets special treatment}
+\begin{itemize}
+  \item ``First Class and Smile Members here`` (airport)
+  \item Fluffy is angry and Joey is not angry.
+    \begin{itemize}
+    \item What does {\it and} mean?
+    \item What does {\it not} mean?
+    \end{itemize}
+  \item Every cat is angry.
+    \begin{itemize}
+    \item What does {\it cat} mean?  
+    \item What does {\it every} mean?
+    \end{itemize}
+  \item Is the division into logical and non-logical vocabulary an inherent property of language or an artifact of the system of meaning representation?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Quantifiers}
+\begin{itemize}
+	\item The semantic type of a quantifier is a relation between sets, called the restriction and body (or scope) of the quantifier
+	\item $[\![every]\!]$ \{ $<$P,Q$>$ $\vert$ P $\subseteq$ Q\}
+	\item $[\![$every cat is angry$]\!]$ is True iff 
+	
+	\{ x $\vert$ x is a cat \} $\subseteq$ \{ y $\vert$ y is angry \}
+	\item $[\![some]\!]$ \{ $<$P,Q$>$ $\vert$ P $\cap$ Q $\neq$ $\emptyset$\}
+	\item $[\![$some cat is angry$]\!]$ is True iff
+	
+	 \{ x $\vert$ x is a cat \} $\cap$ \{ y $\vert$ y is angry \} $\neq$ $\emptyset$
+	\item $[\![many]\!]$ ?
+\end{itemize}
+\end{frame}
+
+\section{Lambda calculus}
+\begin{frame}
+\frametitle{Partial evaluation for FOL: Lambda calculus}
+\begin{itemize}
+	\item Basic idea: pass around partially evaluated functions
+	\item feed them to other functions as arguments
+	\item e.g.\ $f: y = x + 2$
+	\item plug in $x = 3$, evaluate to 5
+	\item or: $f: z = y*(x+2)$
+	\item plug in $x = 3$, evaluate to $f: z = 3y$
+	\item then can plug in y = 2 and evaluate to 6
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Lambda calculus for semantics}
+\begin{itemize}
+	\item Used to evaluate FOL expressions in a compositional manner
+	\item e.g.\ constituent by constituent
+	\item A constituent does not necessarily have a truth value:
+          \[ \lambda x. gave(Kim,book,x) \]
+	\item need to hold on to a partially evaluated constituent
+	\item Converting multi-argument predicates to sequences of single-argument predicates
+	\item Incrementally accumulates multiple arguments spread over different parts of the tree
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Lambda calculus}
+\begin{itemize}
+	\item Form: $\lambda$ + Variable + FOL expression
+	\item $\lambda x.P(x)$ (evaluating the expression with respect to $x$)
+	\item $\lambda x.P(x)(A) \rightarrow P(A)$ ($\lambda$-reduction; binding a formal parameter to a concrete term)
+	\item $\lambda x.\lambda y.Near(x,y)$
+	\item $\lambda x.\lambda y.Near(x,y)(Moscow)$
+	\item $\lambda y.Near(Moscow,y)$
+		\item $\lambda y.Near(Moscow,y)(Center)$
+		\item $Near(Moscow,Center)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Lambda calculus and composition}
+\begin{itemize}
+\item One semantic composition rule per syntax rule.
+\item 
+\verb+S -> NP VP+\\
+$\mbox{VP}'(\mbox{NP}')$
+\item Rover barks:\\
+VP {\it bark} is $\lambda x [ \pred{bark}(x) ]$\\
+NP {\it Rover} is $r$\\
+$\lambda x [ \pred{bark}(x) ](r) = \pred{bark}(r)$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Transitive verbs}
+Kitty chases Rover
+\begin{itemize}
+\item Transitive verbs: two arguments (NOTE the order)\\
+$\lambda x [ \lambda y  [ \pred{chase}(y,x) ]]$
+\item \verb+VP -> Vtrans NP+\\
+$\mbox{Vtrans}'(\mbox{NP}')$\\
+\item 
+$\lambda x \lambda y  [ \pred{chase}(y,x) ](r)
+= \lambda y  [ \pred{chase}(y,r) ]$\\
+\item
+\verb+S -> NP VP+\\
+$\mbox{VP}'(\mbox{NP}')$
+\item $\lambda y  [ \pred{chase}(y,r) ](k) = \pred{chase}(k,r) ]$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Grammar fragment using lambda calculus}
+\centering \begin{tabular}{lr}
+\verb+S -> NP VP+ & $\mbox{VP}'(\mbox{NP}')$\\
+\verb+VP -> Vtrans NP+ & $\mbox{Vtrans}'(\mbox{NP}')$\\
+\verb+VP -> Vintrans+ & $\mbox{Vintrans}'$\\
+\verb+Vtrans -> chases+ & $\lambda x \lambda y  [ \pred{chase}(y,x) ]$\\
+\verb+Vintrans -> barks+ & $\lambda z [ \pred{bark}(z) ]$\\
+\verb+Vintrans -> sleeps+ & $\lambda w [ \pred{sleep}(w) ]$\\
+\verb+NP -> Kitty+ & $k$\\
+\end{tabular}
+\end{frame}
+
+\begin{frame}
+\frametitle{Beyond toy examples \ldots}
+\begin{itemize}
+\item Use first order logic where possible (e.g., event variables, next slide).
+\item However, First Order Predicate Calculus (FOPC) is sometimes inadequate: e.g., {\it most}, {\it may}, {\it believe}.
+\item Quantifier scoping multiplies analyses:\\
+{\it Every cat chased some dog}:\\
+$\forall x [ \pred{cat}(x) \implies \exists y [ \pred{dog}(y) 
+\wedge \pred{chase}(x,y) ]]$\\
+$\exists y [ \pred{dog}(y) \wedge \forall x [ \pred{cat}(x) \implies 
+\pred{chase}(x,y) ]]$
+\item Often no straightforward logical analysis\\
+e.g., Bare plurals such as {\it Ducks lay eggs}.
+\item Non-compositional phrases (multiword expressions): e.g., {\it red tape} meaning bureaucracy.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Event variables}
+\begin{itemize}
+\item Allow first order treatment of adverbs and PPs modifying verbs by
+\newterm{reifying} the event.
+\item \egtext{Rover barked}
+\item instead of $\pred{bark}(r)$ we have $\exists e [ \pred{bark}(e,r) ]$
+\item \egtext{Rover barked loudly}
+\item $\exists e [ \pred{bark}(e,r) \wedge \pred{loud}(e) ]$
+\item There was an event of Rover barking and that event was loud.
+\end{itemize}
+\end{frame}
+
+
+\section{Computational semantics}
+\begin{frame}
+\frametitle{Computational semantics desiderata (J\&M)}
+\begin{itemize}
+	\item Verifiability: We must be able to compare the representation to a knowledge base
+	\item Lack of ambiguity: A semantic representation should have just one interpretation
+	\item Canonical form: A given interpretation should have just one representation
+	\item Expressiveness: Must be able to adequately represent a wide range of expressions
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Computational semantics desiderata (Copestake)}
+\begin{itemize}
+	\item Expressive Adequacy: The framework must allow linguistic meanings to be expressed correctly
+	\item Grammatical Compatibility: clear link to other kinds of grammatical information (most notably syntax)
+	\item Computational Tractability: Process meanings, check semantic equivalence, express relationships between semantic representations straightforwardly
+	\item Underspecifiability: Allow resolution of partial semantic representations
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Computational semantics}
+  \begin{itemize}
+  \item Semantic parsing: mapping surface sentence to a semantic representation
+  \item Should this representation be a structure?
+    \begin{itemize}
+    \item Sentence meaning: probably yes
+    \item Speaker meaning: unclear
+    \end{itemize}  
+  \end{itemize}
+
+  (But sentence meaning is usually directly involved in speaker meaning)
+\end{frame}
+
+\begin{frame}
+\frametitle{Sentence vs. Speaker meaning (Grice 1968)}
+
+\begin{itemize}
+	\item Through experience within our speech communities, we learn (and help create) shared linguistic conventions.
+	\item These conventions support fairly consistent calculation of {\bf sentence meaning} by different speakers in the same community.
+	\item The sentence meaning of an utterance (together with its form) serves as a clue which a listener can use to construct his/her representation of the speaker's {\bf speaker meaning}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sentence vs. Speaker meaning}
+{\it Could you pass me the salt? -- No, I couldn't pass you the salt!}
+
+\vspace{1cm}
+
+\begin{itemize}
+	\item Sentence meaning, but not speaker meaning, is compositional
+	\item Systems attempting to understand speaker meaning directly from surface:
+	resolve the same problems around grammatical structure for each task
+	unlikely to scale 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semantic compositionality}
+\begin{itemize}
+	\item The meaning of the whole must be directly assembled from its parts
+	\item E.g.\ {\it Agent/patient} information comes from the {\it subject/object constituents}
+	\item The syntactico-semantic formalism must explicitly ensure such connections and assembly
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Compositional layer and syntax-semantics interface}
+\begin{itemize}
+	\item Predicate-argument structure
+	\item Scope of negation and other operators
+	\item Restriction of quantifiers
+	\item Modality
+	\item Tense/aspect/mood
+	\item Information structure
+	\item Discourse status of referents of NPs
+	\item Politeness
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Minimal Recursion Semantics (MRS)}
+\begin{itemize}
+	\item An example of a compositional computational semantics approach
+	\item Copestake et al. (2005)
+	\item A semantic formalism (not a semantic theory)
+\end{itemize}
+\includegraphics[width=\textwidth]{figures/dmrs}
+\centering
+{\it Kim gave a book to Sandy}
+\end{frame}
+
+\begin{frame}
+\frametitle{Minimal Recursion Semantics (MRS)}
+\includegraphics[width=\textwidth]{figures/mrs}
+
+\vspace{1cm}
+
+\centering
+{\it Kim gave a book to Sandy}
+\end{frame}
+
+\begin{frame}[fragile]{Machine translation by transfer}
+\begin{itemize}
+\item Assuming a canonical form for semantic structure, we can
+  generate sentences in one language given a semantic structure which
+  was obtained by parsing a sentence in another language
+\item A {\bf symbolic} approach to MT
+\item Requires {\bf grammars} for both languages
+\item Ensures {\bf precision and grammaticality} of the translations
+\item Disadvantage: lack of {\bf robustness}: not every sentence will be translated.
+\end{itemize}
+
+\verb+ace -g grammar.dat -Tf1 | ace -g grammar.dat -e+
+        
+\end{frame}
+
+\begin{frame}
+\frametitle{MRS: MINIMAL recursion semantics}
+\begin{itemize}
+	\item Syntactic structure may sometimes be irrelevant to the truth conditions
+	\item {\it fierce black cat} vs {\it gato negro y feroz}
+	\item with syntax insufficiently abstracted away, hard to do transfer
+	\item the LFs produced by the two grammars will look different:
+	
+	\includegraphics[width=0.8\textwidth]{figures/lfs}	
+	
+	\item $fierce(x) \wedge black(x) \wedge cat(x)$ -- solution?	
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Flat semantics: quantifier problem}
+\begin{itemize}
+	\item {\it Every white horse is old}
+	\item every (x, white (x) $\wedge$ horse (x), old (x))
+	\item Flat: every(x), horse(x), old(x), white(x)
+	\item problem?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Flat semantics: quantifier problem}
+\begin{itemize}
+	\item {\it Every white horse is old}
+	\item every (x, white (x) $\wedge$ horse (x), old (x))
+	\item Flat: every(x), horse(x), old(x), white(x)
+	\item problem?
+	\item {\it Every old horse is white}?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Quantifier scope}
+{\it Every dog chases some white cat}
+
+\vspace{0.7cm}
+
+\centering
+\includegraphics[width=\textwidth]{figures/scope1}
+\end{frame}
+
+\begin{frame}
+\frametitle{Quantifier scope}
+{\it Every dog chases some white cat}
+
+\vspace{0.7cm}
+
+\centering
+\includegraphics[width=\textwidth]{figures/scope2}
+\end{frame}
+
+\begin{frame}
+\frametitle{Scope underspecification}
+
+\begin{minipage}{0.45\textwidth}
+\includegraphics[height=0.4\textheight,width=\linewidth]{figures/scope1}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+	\includegraphics[height=0.4\textheight,width=\linewidth]{figures/scope2}
+\end{minipage}
+%\vspace{0.7cm}
+
+\includegraphics[width=\textwidth]{figures/scope3}
+
+\begin{itemize}
+	\item {\it Every dog chases some white cat}
+	\item Can say EITHER $h9=h1$ or $h8=h5$
+\end{itemize}
+
+\end{frame}
+
+\section{Semantics in NLP}
+
+\begin{frame}{NLP business with semantics}
+  \begin{itemize}
+  \item Construct knowledge base or model of the world
+    \begin{itemize}
+    \item wikidata, DbPedia, ConceptNet
+    \item TBOX vs ABOX
+    \end{itemize}
+  \item Extract meaning representations from linguistic input
+  \item Match input to world knowledge
+  \item Produce replies/take action (or queries) on the basis of the results
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Semantics in NLP}
+
+  \begin{itemize}
+  \item The hottest area in NLP right now
+  \item all kinds of NLU tasks are associated with semantic
+    annotation and semantic parsing
+    \begin{itemize}
+    \item sentiment analysis
+    \item dialog systems
+    \item news/ads ranking etc.
+    \end{itemize}
+  \item NLP semantics today is usually task-oriented and
+    domain-tailored e.g. a grammar/semantic system for cooking recipes
+    often have nothing to do with theoretical semantics ambitions
+  \end{itemize}
+\end{frame}
+  
+
+\begin{frame}
+\frametitle{Semantics in NLP}
+\includegraphics[height=0.5\textheight]{figures/sentiment}
+\vspace{0.4cm}
+
+\begin{itemize}
+	\item Linguistic models, syntactic or semantic (or morphological...) tend to be too unwieldy for today's NLP
+	\item NLP goals: perform well on a task, not necessarily precisely and not necessarily providing explanations
+	\item Tacit expectation to map directly from {\it surface} to {\it speaker meaning}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{(pre-vector space) semantics in NLP}
+
+\begin{itemize}
+	\item e.g.\ Abstract Meaning Representation (AMR; Banarescu et al., 2013)
+	\item Note similarities with dependency parse
+        \item \url{https://amr.isi.edu}
+\end{itemize}
+
+\vspace{0.2cm}
+\includegraphics[height=0.5\textheight]{boy-go.jpg}
+\end{frame}
+
+\begin{frame}{AMR: a widely adopted formalism}
+
+  {\it "We describe Abstract Meaning Representation (AMR), a semantic
+    representation language in which we are writing down the meanings
+    of thousands of English sentences. We hope that a sembank of
+    simple, whole-sentence semantic structures will spur new work in
+    statistical natural language understanding and generation, like
+    the Penn Treebank encouraged work on statistical parsing."}
+  (Banarescu et al., 2013)
+
+\textbf{this came true}!! we look at it as an example of a widely adopted formalism!
+	
+\end{frame}
+
+\begin{frame}{AMR: Pros and Cons}
+
+  \begin{description}[the]
+  \item[+] very simple representation
+  \item[+] yields nice immediate results
+  \item[+] wide paraphrase sets
+  \item[-] Plateaus: like WJS, AMR-based research keeps reusing the same dataset and ends up overfitting to it
+  \item[-] Inconsistent and task-dependent annotation
+  \end{description}
+  
+\end{frame}
+
+\begin{frame}{Thematic Roles}
+
+  \begin{itemize}
+  \item describe semantic roles of verbal arguments
+  \item capture commonality across verbs
+  \item e.g. subject \emph{break/open} is AGENT (volitional
+    cause). THEME (things affected by action)
+  \item enables generalization over surface order of arguments
+    \begin{itemize}
+    \item John$_{agent}$ broke the window$_{theme}$
+    \item The rock$_{instrument}$ broke the window$_{theme}$
+    \item The window$_{theme}$ was broken by John$_{agent}$
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Thematic Role Issues}
+
+  Hard to produce:
+  \begin{itemize}
+  \item standard set of roles. Fragmentation: often need to make more
+    specific. E.g. INSTRUMENT can be subject?
+  \item standard definition of roles: most AGENTs (animals,
+    volitional, sentient, causal\ldots) but not all.
+  \end{itemize}
+
+  strategies:
+  \begin{itemize}
+  \item generalized semantic roles (proto-agent, proto-patient etc)
+  \item definied heuristically (propbank)
+  \item define roles specific to verbs/nouns: \href{https://framenet.icsi.berkeley.edu/fndrupal/}{FrameNet}
+  \end{itemize}
+
+  \vfill
+  Even if we come up with a standard set of some sort, we will have
+  low inter-annotator agreement. Hard to expect that people will
+  interpret the roles exactly the same
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Sembanks, Propbanks...}
+\begin{itemize}
+	\item Representations like AMR can be stored in ``sembanks''
+	\item Compare to treebanks
+	\item Challenge: {\bf interannotator agreement}
+	\begin{itemize}
+		\item ...is a problem with treebanks, too, unless a grammar is used
+		\item is even a bigger problem in sembanks
+		\item role-labeling is more vague than syntactic structure
+		\item e.g.\ what kind of granularity?
+	\end{itemize}
+\item Familiar issues with overfitting
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{PropBank}
+\includegraphics[width=.8\textwidth]{figures/propbank}
+
+\url{http://propbank.github.io}
+\end{frame}
+
+% \begin{frame}
+% \frametitle{AI, robotics and grounded reasoning}
+% \includegraphics[height=0.7\textheight]{figures/krishnaswamy}
+
+% \begin{itemize}
+% 	\item {\it There is exactly one yellow object touching the wall}
+% 	\item (object-count-equals (yellow (touch-wall all-objects)) 1)
+% 	\item {\it natural} language?..
+% \end{itemize}
+% \end{frame}
+
+
+\begin{frame}{Vector space semantics}
+\includegraphics[height=0.6\textheight]{figures/vector-space}
+\begin{itemize}
+	\item The core of today's NLP
+	\item Are word vectors semantic representations?
+	\item Yes, but not necessarily compositional
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Word senses and Word sense disambiguation}
+
+  \begin{itemize}
+  \item A problem from which word vectors arise
+  \item How close/distinct are the senses of two words?
+  \item How to determine this computationally? \pause
+    \begin{itemize}
+    \item See which contexts they appear in: N-grams! (or, these days,
+      word vectors) $\to$ Compute distance $\to$ Closer distance $=$
+      closer meaning?
+    \end{itemize}
+  \item What is one problem with this?  \pause
+      \begin{itemize}
+      \item This place is very \textbf{loud}
+      \item This place is very \textbf{quiet}
+      \end{itemize}
+    \item Antonyms tend to occur in the same context
+  \end{itemize}
+\end{frame}
+
+
+\section{Inference}
+
+\begin{frame}
+\frametitle{Natural language inference}
+\begin{itemize}
+\item Inference on a knowledge base: convert natural language expression to
+KB expression, valid inference according to KB.  
+\begin{itemize}
+\item[+] Precise
+\item[+] Formally verifiable
+\item[+] Disambiguation using KB state
+\item[-] Limited domain, requires KB to be formally encodable
+\end{itemize}
+\item Language-based inference: does one utterance follow from another?
+\begin{itemize}
+\item[+]Unlimited domain
+\item[+/-] Human judgement
+\item[-/+] Approximate/imprecise
+\end{itemize}
+\item Both approaches may use logical form of utterance.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Lexical meaning and meaning postulates}
+
+\begin{itemize}
+\item Some inferences validated on logical representation directly, most require
+lexical meaning. 
+\item meaning postulates: e.g., \[ \forall x [ \pred{bachelor}(x) \rightarrow 
+\pred{man}(x) \wedge \pred{unmarried}(x)] \]
+\item usable with compositional semantics and theorem provers
+\item e.g. from `Kim is a bachelor', we can construct the LF
+$\pred{bachelor}(\mbox{Kim})$ and then deduce 
+$\pred{unmarried}(\mbox{Kim})$
+\item Problematic in general, OK for narrow domains or micro-worlds.
+\end{itemize}
+
+
+\end{frame} 
+
+\section{Recognising Textual Entailment task}
+
+
+\begin{frame}{Recognising Textual Entailment (RTE) shared tasks}
+
+\begin{itemize}
+\item[T:] The girl was found in Drummondville earlier this month.
+\item[H:] The girl was discovered in Drummondville.
+\end{itemize}
+
+\begin{itemize}
+\item DATA: pairs of text (T) and hypothesis (H).  H may or may not
+  follow from T.
+
+\item TASK: label TRUE (if follows) or FALSE (if doesn't follow),
+  according to human judgements.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Many approaches}
+
+  \begin{itemize}
+  \item \url{https://aclanthology.org/S14-2125/} and
+    \url{https://aclanthology.org/W15-2205/}
+  \item Natural Logic \url{https://aclanthology.org/W09-3714/}
+  \item Combining symbolic and ML/DL
+    \url{https://aclanthology.org/2020.coling-demos.9/} and
+    \url{https://aclanthology.org/P16-2079/}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{RTE using logical forms}
+
+\begin{itemize}
+\item T sentence has logical form $\pred{T}$, H sentence has logical
+  form $\pred{H}$
+\item If $\pred{T} \implies \pred{H}$ conclude TRUE, otherwise
+  conclude FALSE.
+\end{itemize}
+
+\begin{itemize}
+\item[T] The girl was found in Drummondville earlier this month.
+\item[$\pred{T}$]
+  $\exists x,u,e [ \pred{girl}(x) \wedge \pred{find}(e,u,x) \wedge
+  \pred{in}(e,\mbox{Drummondville}) \wedge
+  \pred{earlier-this-month}(e) ]$
+\item[H] The girl was discovered in Drummondville.
+\item[$\pred{H}$] $\exists x,u,e [ \pred{girl}(x) \wedge \pred{discover}(e,u,x) \wedge \pred{in}(e,\mbox{Drummondville}) ]$
+\item[MP] $[ \pred{find}(x,y,z) \implies \pred{discover}(x,y,z) ]$
+\item So $\pred{T} \implies \pred{H}$ and we conclude TRUE
+\end{itemize}
+
+
+\end{frame}
+\begin{frame}
+\frametitle{More complex examples}
+ 
+\begin{itemize}
+\item[T:] Four Venezuelan firefighters who were traveling to a
+  training course in Texas were killed when their sport utility
+  vehicle drifted onto the shoulder of a highway and struck a parked
+  truck.
+\item[H:] Four firefighters were killed in a car accident.
+\end{itemize}
+
+Systems using logical inference are not robust to missing information:
+simpler techniques can be effective (partly because of choice of
+hypotheses in RTE).
+
+\end{frame}
+
+\begin{frame}
+\frametitle{More examples}
+ 
+\begin{itemize}
+\item[T:] Clinton's book is not a big seller here.
+\item[H:] Clinton's book is a big seller.
+\end{itemize}
+\begin{itemize}
+\item[T:] After the war the city was briefly occupied by the Allies and then
+was returned to the Dutch.
+\item[H:] After the war, the city was returned to the Dutch.
+\end{itemize}
+\begin{itemize}
+\item[T:] Lyon is actually the gastronomic capital of France.
+\item[H:] Lyon is the capital of France.
+\end{itemize}
+
+\end{frame}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
