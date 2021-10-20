@@ -138,6 +138,19 @@ Monitoria: Sexta 14:20 - 16:20 (@yfaria)
   - continuação sobre semântica
   - inferência textual
 
+* aula 17 <2021-10-13 Wed>
+
+  - continuação sobre semântica
+  - inferência textual
+
+* aula 18 <2021-10-18 Mon>
+
+  - apresentação do assigment 03
+
+* aula 19 <2021-10-20 Wed>
+
+  - semântica lexical
+
 * Referencias
 
   - https://web.stanford.edu/~jurafsky/slp3/
