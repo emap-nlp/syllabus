@@ -149,6 +149,7 @@ Monitoria: Sexta 14:20 - 16:20 (@yfaria)
 
 * aula 19 <2021-10-20 Wed>
 
+  - revisão semântica composicional (sentenças) e inferência textual
   - semântica lexical
 
 * Referencias
