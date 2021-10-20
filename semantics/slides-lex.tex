@@ -1,0 +1,479 @@
+\documentclass{beamer}
+
+
+\usepackage[english]{babel}
+
+% \usepackage[latin1]{inputenc}
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+
+\usepackage{latexsym}
+\usepackage{eepic}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{multicol}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan}
+
+
+\newcommand{\newterm}[1]{{\alert{#1}}}
+\newcommand{\figtype}[1]{{\bf \strut #1}}
+
+\newcommand{\builtin}[1]{{\bf #1}}
+\newcommand{\myvar}[1]{{\tt #1}}
+\newcommand{\myfn}[1]{{\tt #1}}
+\newcommand{\standin}[1]{{\it #1}}
+
+\newcommand{\op}[1]{\, #1 \,}
+\newcommand{\unify}{\op{\sqcap}}
+
+\newcommand{\cddunify}{\stackrel{{\scriptscriptstyle <}} 
+                              {\sqcap}_{ca}}
+\newcommand{\dunify}{\stackrel{{\scriptscriptstyle <}}
+                              {\sqcap}}
+\newcommand{\ddunify}{\stackrel{{\scriptscriptstyle <>}}
+                              {\sqcap}}
+\newcommand{\xdunify}{\stackrel{{\scriptscriptstyle <}} 
+                              {\sqcap}_{x}}
+\newcommand{\csddunify}{\stackrel{{\scriptscriptstyle <}}
+                              {\sqcap}_{cs}}
+
+
+\newcommand{\modal}[1]{\langle #1 \rangle}
+%\newcommand{\hidden}[1]{}
+\newcommand{\hidden}[1]{#1}
+%\newcommand{\notpublic}[1]{}% public version
+\newcommand{\notpublic}[1]{#1}
+\newcommand{\lrulearrow}{\mapsto}
+
+\newcommand{\lkbentryname}[1]{{\texttt{#1}}}
+
+%\newcommand{\pred}[1]{\mbox{#1$'$}}
+
+\newcommand{\figtext}{\normalsize}
+
+\newcommand{\sentbound}{$\langle\mbox{s}\rangle$}
+\newcommand{\sentbend}{$\langle\mbox{/s}\rangle$}
+\newcommand{\affix}{\ \mbox{}\hat{\mbox{}}\mbox{}\ }
+
+\newenvironment{pseudocode}
+{\begin{tabbing}}
+{\end{tabbing}}
+
+\newcommand{\pcvar}[1]{{\color[rgb]{0,0,1}{\it #1}}}
+
+\newcommand{\edge}[1]{[#1]}
+
+\newcommand{\avmplus}[1]{{\setlength{\arraycolsep}{0.8mm}	
+                       \renewcommand{\arraystretch}{1.2} %1.2
+                       \left[ 			
+                       \begin{array}{l}
+                       \\[-5mm] #1 \\[-5mm] \\
+                       \end{array} 		
+                       \right]
+                    }}
+\newcommand{\attval}[2]{{\mbox{\normalsize\sc #1}\ \ {{#2}}}}
+\newcommand{\attvaltyp}[2]{{\mbox{\normalsize\sc #1}\ \ \ \ {\myvaluebold{#2}}}}
+\newcommand{\myvaluebold}[1]{{\mbox{\normalsize {\bf #1}}}}
+\newcommand{\ind}[1]{{\setlength{\fboxsep}{0.25mm} \: \fbox{{\small #1}} \:}}
+
+
+\newcommand{\savmplus}[1]{{\setlength{\arraycolsep}{0.5mm}	
+                       \renewcommand{\arraystretch}{1.0} %1.2
+                       \left[ 			
+                       \begin{array}{l}
+                       \\[-5mm] #1 \\[-5mm] \\
+                       \end{array} 		
+                       \right]
+                    }}
+\newcommand{\sattval}[2]{{\mbox{\small\sc #1}\ {{#2}}}}
+\newcommand{\sattvaltyp}[2]{{\mbox{\small\sc #1}\ \ {\smyvaluebold{#2}}}}
+\newcommand{\smyvaluebold}[1]{{\mbox{\small {\bf #1}}}}
+
+% commands for figures
+\newcommand{\figfeat}[1]{{\sc \strut #1}}
+\newcommand{\nodedot}{\circle*{5}}
+\newcommand{\feature}{\sc}
+\newcommand{\type}{\bf}
+
+\newenvironment{myeg}
+{\begin{trivlist} \item \color[rgb]{0,1,0}}
+{\end{trivlist}}
+
+\newenvironment{indented}
+{\begin{trivlist} \item}
+{\end{trivlist}}
+
+\newcommand{\egtext}[1]{{\color[rgb]{0,1,0} #1}}
+
+\newcommand{\redthing}[1]{{\color[rgb]{1,0,0} #1}}
+
+\newcommand{\bluething}[1]{{\color[rgb]{0,0,1} #1}}
+
+\newcommand{\purplething}[1]{{\color[rgb]{1,0,1} #1}}
+
+\newcommand{\cfga}{$\rightarrow$}
+
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+
+\newcommand{\fvec}{\vec{f}}
+% use in math mode
+
+
+\title{Introduction to NLP \\ Lexical Semantics\thanks{Ann Copestake}}
+
+%\subtitle{Presentation Subtitle} % (optional)
+
+\author{Alexandre Rademaker}
+
+\institute{FGV/EMAp}
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\newcommand{\pred}[1]{{\mbox{#1}'}}
+\newcommand{\qeq}{$=_q$ }
+
+\begin{document}
+
+\begin{frame}{Outline of today's lecture}
+\tableofcontents
+\end{frame}
+
+\begin{frame}{Lexical semantics}
+\begin{itemize}
+\item Limited domain: mapping to some knowledge base term(s).
+  Knowledge base constrains possible meanings.
+\item Issues for broad coverage systems:
+\begin{itemize}
+\item Boundary between lexical meaning and world knowledge.
+\item Representing lexical meaning.
+\item Acquiring representations.
+\item Polysemy and multiword expressions.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Approaches to lexical meaning}
+
+  \begin{itemize}
+  \item Formal semantics: \newterm{extension} --- what words denote
+    (e.g., $\pred{cat}$: the set of all cats). \pause But \ldots
+    \pause
+  \item Semantic primitives: e.g., {\it kill} means CAUSE~(NOT~(ALIVE)).
+    \pause But \ldots
+    \pause
+  \item Meaning postulates: 
+    \[ \forall e,x,y [ \pred{kill}(e,x,y) \rightarrow 
+      \exists e' [ \pred{cause}(e,x,e') \wedge \pred{die}(e',y)]] \]
+    \pause But \ldots
+    \pause
+  \item Ontological relationships: informal or formal (description
+    logics): this lecture (informal approaches).
+  \item Distributional approaches (word embeedings).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Examples to think about}
+  \begin{itemize}
+  \item tomato
+  \item table
+  \item thought
+  \item democracy
+  \item push
+  \item sticky
+  \end{itemize}
+\end{frame}
+
+\section{Lexical semantics: semantic relations}
+
+\begin{frame}{Hyponymy: IS-A}
+  \begin{itemize}
+  \item (a sense of) {\it dog} is a 
+    \newterm{hyponym} of (a sense of) {\it animal}
+  \item {\it animal} is a \newterm{hypernym} of {\it dog}
+  \item hyponymy relationships form a \newterm{taxonomy}
+  \item works best for concrete nouns
+  \end{itemize}
+\end{frame} 
+
+\begin{frame}{Some issues concerning hyponymy}
+  \begin{itemize}
+  \item not useful for all words: {\it thought}, {\it democracy}, {\it
+      push}, {\it sticky}?
+  \item individuation differences: is {\it table} a hyponym of {\it
+      furniture}?
+  \item multiple inheritance: e.g., is {\it coin} a hyponym of both
+    {\it metal} and {\it money}?
+  \item what does the top of the hierarchy look like?
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Other semantic relations}
+
+\begin{block}{classical}
+  \begin{description}
+  \item[Meronomy: PART-OF] e.g., {\it arm} is a \newterm{meronym} of
+    {\it body}, {\it steering wheel} is a meronym of {\it car} (piece vs
+    part)
+  \item[Synonymy] e.g., {\it aubergine}/{\it eggplant}.
+  \item[Antonymy] e.g., {\it big}/{\it little}
+  \end{description}
+\end{block}
+
+\begin{block}{others}
+  \begin{description}
+  \item[Near-synonymy/similarity] e.g., {\it exciting}/{\it thrilling}\\
+    e.g., {\it slim}/{\it slender}/{\it thin}/{\it skinny}
+  \end{description}
+\end{block}
+
+\vfill
+More at \url{https://globalwordnet.github.io/gwadoc/}
+
+\end{frame} 
+
+
+\begin{frame}[fragile]{WordNet}
+
+\begin{itemize}
+\item large scale, open source resource for English
+\item hand-constructed
+\item wordnets being built for other languages
+\item organized into \newterm{synsets}: synonym sets (near-synonyms)
+\end{itemize}
+
+\begin{itemize}
+\item Overview of adj red in \verb|wn| command and Emacs Mode 
+\item \href{http://wn.mybluemix.net/search?search_field=word_en&term=boy}{boy}
+\end{itemize}
+
+\end{frame}
+
+ 
+\begin{frame}[fragile]{Hyponymy in WordNet}
+
+\begin{semiverbatim}
+Sense 6
+big cat, cat
+       => leopard, Panthera pardus
+           => leopardess
+           => panther
+       => snow leopard, ounce, Panthera uncia
+       => jaguar, panther, Panthera onca, 
+                                   Felis onca
+       => lion, king of beasts, Panthera leo
+           => lioness
+           => lionet
+       => tiger, Panthera tigris
+           => Bengal tiger
+           => tigress
+\end{semiverbatim}
+\end{frame} 
+
+\begin{frame}
+\frametitle{Using hyponymy}
+\begin{itemize}
+\item Semantic classification: e.g., for named entity recognition. e.g., \egtext{JJ Thomson Avenue} is a place.
+\item RTE style inference: \egtext{find}/\egtext{discover} 
+\item Word sense disambiguation 
+\item Query expansion in search
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Collocation}
+\begin{itemize}
+\item two or more words that occur together more often than expected
+  by chance (informal description --- there are others)
+\item some collocations are \newterm{multiword expressions} (MWE), 
+  \href{http://wn.mybluemix.net/synset?id=07935152-n}{green tea}
+\item non-MWEs: \egtext{heavy snow} or \emph{young boy}?
+\item what about
+  \href{http://wn.mybluemix.net/synset?id=09278537-n}{geological
+    fault}?
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Open Wordnet for Portuguese}
+
+  \begin{itemize}
+  \item \url{http://openwordnet-pt.org/}
+  \item coverage vs soundness
+  \item can we find:
+    \begin{itemize}
+    \item cargo -- no sentido de posicao social,
+    \item pleito -- no sentido de eleicao, nao de requisicao
+    \item posse -- no sentido de dia da posse, cerimonia de
+      inauguracao como deputado ou senador ou ministro
+    \end{itemize}
+  \item glosstag corpus and its semantic representation
+  \item corpus annotation
+  \end{itemize}
+  
+\end{frame}
+
+
+\section{Polysemy}
+
+\begin{frame}
+\frametitle{Polysemy}
+\begin{itemize}
+\item \newterm{homonymy}: unrelated word senses.  {\it bank} (raised land)
+vs {\it bank} (financial institution)
+\item {\it bank} (financial institution) vs {\it bank} (in a casino): 
+related but distinct senses.
+\item {\it bank} (N) (raised land) vs {\it bank} (V)
+(to create some raised land): \newterm{regular polysemy}.  Compare
+{\it pile}, {\it heap} etc
+\item vagueness: {\it bank} (river vs snow vs cloud)? \href{https://bit.ly/3jiBFVy}{see here}
+\end{itemize}
+
+\vfill
+No clearcut distinctions.\\
+Dictionaries are not consistent.
+\end{frame}
+
+
+\section{Word sense disambiguation}
+
+\begin{frame}{Word sense disambiguation}
+
+Needed for many applications, problematic for large domains.\\
+Assumes that we have a standard set of word senses (e.g., WordNet)
+\begin{itemize}
+\item frequency: e.g., {\it diet}: the food sense
+(or senses) is much more frequent than the
+parliament sense (Diet of Wurms) 
+\item collocations: e.g. {\it striped bass} (the fish) vs 
+{\it bass guitar}: syntactically related or in a window of words
+(latter sometimes called `cooccurrence').
+Generally `one sense per collocation'.
+\item selectional restrictions/preferences (e.g.,
+{\it Kim eats bass}, must refer to fish
+\end{itemize}
+
+\end{frame} 
+
+
+\begin{frame}{WSD techniques}
+
+\begin{itemize}
+\item supervised learning: sense-tagged corpora are difficult to
+  construct, algorithms need far more data than POS
+  tagging. (\href{https://ai.googleblog.com/2017/01/a-large-corpus-for-supervised-word.html}{google},
+  \href{http://nlpprogress.com/english/word_sense_disambiguation.html}{datasets})
+
+\item unsupervised learning
+  (\href{https://github.com/alvations/pywsd}{pywsd},
+  \href{https://ixa2.si.ehu.eus/ukb/}{ukb})
+
+\item selectional preferences: don't work very well by themselves,
+  useful in combination with other techniques
+\end{itemize}
+
+\end{frame} 
+
+
+\begin{frame}{Standalone WSD}
+
+Once a very common research topic, now less studied:
+
+\begin{itemize}
+\item Evaluation issues
+\item Lack of a good standard
+\end{itemize}
+\end{frame} 
+
+
+\section{Grounding}
+
+\begin{frame}{Grounding}
+  \begin{itemize}
+  \item meaning isn't (just) about symbols: humans need to recognize and
+    manipulate things in the world.
+  \item `grounding': relate symbols to the real world (often associated
+    with Harnad, but other authors too).
+  \item is grounding an essential part of meaning?
+  \item preliminary/abstract discussion here 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Turing: `Computing machinery and Intelligence'}
+  \begin{itemize}
+  \item introduces what is usually called the `Turing Test' to replace
+    the question `Can machines think?'
+  \item Turing described `The Imitation Game': a man (A), a woman (B)
+    and an interrogator (C) who must decide whether X is A and Y is B
+    or vice versa.
+  \item questions put to both A and B: A is trying to persuade C to
+    make a mistake, B is trying to help C.
+  \item If we instead have A is machine, B is human, how often will C
+    get the identification wrong (after 5 minutes)?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Intelligence as ungrounded imitation?}
+  \begin{itemize}
+  \item Turing described an abstract test (avoiding the complications
+    of robotics, vision etc).
+    
+  \item But communication is central.
+
+  \item Deception is key to the test: computer `pretends' to be human.
+
+  \item Sloman (e.g., p606--610 Cooper and van Leeuwen (eds), 2013)
+    argues that Turing did NOT propose this as a test for
+    intelligence.
+
+  \item Searle `Chinese Room': discussion of consciousness, criticism
+    of Strong AI.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Lexical meaning: what doesn't work}
+  \begin{itemize}
+  \item meaning of \egtext{tomato} is \pred{tomato}?
+  \item meaning postulates (lecture notes! What is a \href{https://bit.ly/2ZcO1rB}{chair}?)
+  \item dictionary definition\\
+    \emph{tomato: mildly acid red or yellow pulpy fruit eaten as a
+      vegetable}
+    
+    good dictionary definition allows reader with some familiarity
+    with a concept to identify it
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Lexical meaning: unanswered questions}
+  \begin{itemize}
+  \item how far does distributional semantics get us?
+  \item grounding often claimed for systems combining vision and
+    language: is this enough?
+  \item are virtual worlds a possible basis for grounding?
+  \item or do we really need robots?
+  \end{itemize}
+\end{frame}
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
