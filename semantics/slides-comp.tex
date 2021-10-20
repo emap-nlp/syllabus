@@ -595,11 +595,11 @@ e.g., Bare plurals such as {\it Ducks lay eggs}.
 \end{frame}
 
 
-\begin{frame}
-\frametitle{PropBank}
-\includegraphics[width=.8\textwidth]{figures/propbank}
+\begin{frame}{PropBank}
 
-\url{http://propbank.github.io}
+  \includegraphics[width=.8\textwidth]{figures/propbank}
+
+  \url{http://propbank.github.io}
 \end{frame}
 
 % \begin{frame}
@@ -614,100 +614,44 @@ e.g., Bare plurals such as {\it Ducks lay eggs}.
 % \end{frame}
 
 
-\begin{frame}{Vector space semantics}
-\includegraphics[height=0.6\textheight]{figures/vector-space}
-\begin{itemize}
-	\item The core of today's NLP
-	\item Are word vectors semantic representations?
-	\item Yes, but not necessarily compositional
-\end{itemize}
-\end{frame}
+\section{Inference}
 
-\begin{frame}{Word senses and Word sense disambiguation}
-
+\begin{frame}{Natural language inference}
   \begin{itemize}
-  \item A problem from which word vectors arise
-  \item How close/distinct are the senses of two words?
-  \item How to determine this computationally? \pause
+  \item Inference on a knowledge base: convert natural language expression to
+    KB expression, valid inference according to KB.  
     \begin{itemize}
-    \item See which contexts they appear in: N-grams! (or, these days,
-      word vectors) $\to$ Compute distance $\to$ Closer distance $=$
-      closer meaning?
+    \item[+] Precise
+    \item[+] Formally verifiable
+    \item[+] Disambiguation using KB state
+    \item[-] Limited domain, requires KB to be formally encodable
     \end{itemize}
-  \item What is one problem with this?  \pause
-      \begin{itemize}
-      \item This place is very \textbf{loud}
-      \item This place is very \textbf{quiet}
-      \end{itemize}
-    \item Antonyms tend to occur in the same context
+  \item Language-based inference: does one utterance follow from another?
+    \begin{itemize}
+    \item[+]Unlimited domain
+    \item[+/-] Human judgement
+    \item[-/+] Approximate/imprecise
+    \end{itemize}
+  \item Both approaches may use logical form of utterance.
   \end{itemize}
 \end{frame}
 
-
-\section{Inference}
-
-\begin{frame}
-\frametitle{Natural language inference}
-\begin{itemize}
-\item Inference on a knowledge base: convert natural language expression to
-KB expression, valid inference according to KB.  
-\begin{itemize}
-\item[+] Precise
-\item[+] Formally verifiable
-\item[+] Disambiguation using KB state
-\item[-] Limited domain, requires KB to be formally encodable
-\end{itemize}
-\item Language-based inference: does one utterance follow from another?
-\begin{itemize}
-\item[+]Unlimited domain
-\item[+/-] Human judgement
-\item[-/+] Approximate/imprecise
-\end{itemize}
-\item Both approaches may use logical form of utterance.
-\end{itemize}
-\end{frame}
-
-
-
-\begin{frame}
-\frametitle{Lexical meaning and meaning postulates}
-
-\begin{itemize}
-\item Some inferences validated on logical representation directly, most require
-lexical meaning. 
-\item meaning postulates: e.g., \[ \forall x [ \pred{bachelor}(x) \rightarrow 
-\pred{man}(x) \wedge \pred{unmarried}(x)] \]
-\item usable with compositional semantics and theorem provers
-\item e.g. from `Kim is a bachelor', we can construct the LF
-$\pred{bachelor}(\mbox{Kim})$ and then deduce 
-$\pred{unmarried}(\mbox{Kim})$
-\item Problematic in general, OK for narrow domains or micro-worlds.
-\end{itemize}
-
-
-\end{frame} 
-
-\section{Recognising Textual Entailment task}
-
-
 \begin{frame}{Recognising Textual Entailment (RTE) shared tasks}
-
-\begin{itemize}
-\item[T:] The girl was found in Drummondville earlier this month.
-\item[H:] The girl was discovered in Drummondville.
-\end{itemize}
-
-\begin{itemize}
-\item DATA: pairs of text (T) and hypothesis (H).  H may or may not
-  follow from T.
-
-\item TASK: label TRUE (if follows) or FALSE (if doesn't follow),
-  according to human judgements.
-\end{itemize}
+  \begin{itemize}
+  \item[T:] The girl was found in Drummondville earlier this month.
+  \item[H:] The girl was discovered in Drummondville.
+  \end{itemize}
+  
+  \begin{itemize}
+  \item DATA: pairs of text (T) and hypothesis (H).  H may or may not
+    follow from T.
+    
+  \item TASK: label TRUE (if follows) or FALSE (if doesn't follow),
+    according to human judgements.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Many approaches}
-
   \begin{itemize}
   \item \url{https://aclanthology.org/S14-2125/} and
     \url{https://aclanthology.org/W15-2205/}
@@ -716,80 +660,75 @@ $\pred{unmarried}(\mbox{Kim})$
     \url{https://aclanthology.org/2020.coling-demos.9/} and
     \url{https://aclanthology.org/P16-2079/}
   \end{itemize}
-  
 \end{frame}
 
 \begin{frame}{RTE using logical forms}
+  \begin{itemize}
+  \item T sentence has logical form $\pred{T}$, H sentence has logical
+    form $\pred{H}$
+  \item If $\pred{T} \implies \pred{H}$ conclude TRUE, otherwise
+    conclude FALSE.
+  \end{itemize}
 
-\begin{itemize}
-\item T sentence has logical form $\pred{T}$, H sentence has logical
-  form $\pred{H}$
-\item If $\pred{T} \implies \pred{H}$ conclude TRUE, otherwise
-  conclude FALSE.
-\end{itemize}
-
-\begin{itemize}
-\item[T] The girl was found in Drummondville earlier this month.
-\item[$\pred{T}$]
-  $\exists x,u,e [ \pred{girl}(x) \wedge \pred{find}(e,u,x) \wedge
-  \pred{in}(e,\mbox{Drummondville}) \wedge
-  \pred{earlier-this-month}(e) ]$
-\item[H] The girl was discovered in Drummondville.
-\item[$\pred{H}$] $\exists x,u,e [ \pred{girl}(x) \wedge \pred{discover}(e,u,x) \wedge \pred{in}(e,\mbox{Drummondville}) ]$
-\item[MP] $[ \pred{find}(x,y,z) \implies \pred{discover}(x,y,z) ]$
-\item So $\pred{T} \implies \pred{H}$ and we conclude TRUE
-\end{itemize}
-
-
+  \begin{itemize}
+  \item[T] The girl was found in Drummondville earlier this month.
+  \item[$\pred{T}$]
+    $\exists x,u,e [ \pred{girl}(x) \wedge \pred{find}(e,u,x) \wedge
+    \pred{in}(e,\mbox{Drummondville}) \wedge
+    \pred{earlier-this-month}(e) ]$
+  \item[H] The girl was discovered in Drummondville.
+  \item[$\pred{H}$] $\exists x,u,e [ \pred{girl}(x) \wedge \pred{discover}(e,u,x) \wedge \pred{in}(e,\mbox{Drummondville}) ]$
+  \item[MP] $[ \pred{find}(x,y,z) \implies \pred{discover}(x,y,z) ]$
+  \item So $\pred{T} \implies \pred{H}$ and we conclude TRUE
+  \end{itemize}
 \end{frame}
-\begin{frame}
-\frametitle{More complex examples}
+
+\begin{frame}{More complex examples}
  
-\begin{itemize}
-\item[T:] Four Venezuelan firefighters who were traveling to a
-  training course in Texas were killed when their sport utility
-  vehicle drifted onto the shoulder of a highway and struck a parked
-  truck.
-\item[H:] Four firefighters were killed in a car accident.
-\end{itemize}
+  \begin{itemize}
+  \item[T:] Four Venezuelan firefighters who were traveling to a
+    training course in Texas were killed when their sport utility
+    vehicle drifted onto the shoulder of a highway and struck a parked
+    truck.
+  \item[H:] Four firefighters were killed in a car accident.
+  \end{itemize}
 
-Systems using logical inference are not robust to missing information:
-simpler techniques can be effective (partly because of choice of
-hypotheses in RTE).
-
+  Systems using logical inference are not robust to missing
+  information: simpler techniques can be effective (partly because of
+  choice of hypotheses in RTE).
 \end{frame}
 
 \begin{frame}{More examples}
   \scriptsize
 
-\begin{block}{Ex 1}
-\begin{itemize}
-\item[T:] Clinton's book is not a big seller here.
-\item[H:] Clinton's book is a big seller.
-\end{itemize}
-\end{block}
+  \begin{block}{Ex 1}
+    \begin{itemize}
+    \item[T:] Clinton's book is not a big seller here.
+    \item[H:] Clinton's book is a big seller.
+    \end{itemize}
+  \end{block}
 
-\begin{block}{Ex 2}
-\begin{itemize}
-\item[T:] After the war the city was briefly occupied by the Allies and then
-was returned to the Dutch.
-\item[H:] After the war, the city was returned to the Dutch.
-\end{itemize}
-\end{block}
-
-\begin{block}{Ex 3}
-  \begin{itemize}
-  \item[T:] Lyon is actually the gastronomic capital of France.
-  \item[H:] Lyon is the capital of France.
-  \end{itemize}
-\end{block}
-
-\begin{block}{Ex 4}
-  \begin{itemize}
-  \item[T:] The young boys are playing outdoors and the man is smiling nearby
-  \item[H:] The kids are playing outdoors near a man with a smile
-  \end{itemize}
-\end{block}
+  \begin{block}{Ex 2}
+    \begin{itemize}
+    \item[T:] After the war the city was briefly occupied by the Allies and then
+      was returned to the Dutch.
+    \item[H:] After the war, the city was returned to the Dutch.
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{Ex 3}
+    \begin{itemize}
+    \item[T:] Lyon is actually the gastronomic capital of France.
+    \item[H:] Lyon is the capital of France.
+    \end{itemize}
+  \end{block}
+  
+  \begin{block}{Ex 4}
+    \begin{itemize}
+    \item[T:] The young boys are playing outdoors and the man is smiling nearby
+    \item[H:] The kids are playing outdoors near a man with a smile
+    \end{itemize}
+  \end{block}
 
 \end{frame}
 

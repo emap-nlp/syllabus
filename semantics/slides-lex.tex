@@ -191,6 +191,21 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Lexical meaning and meaning postulates}
+  \begin{itemize}
+  \item Some inferences (previous slides) validated on logical
+    representation directly, most require lexical meaning.
+  \item meaning postulates: e.g.,
+    \[ \forall x [ \pred{bachelor}(x) \rightarrow \pred{man}(x) \wedge
+      \pred{unmarried}(x)] \]
+  \item usable with compositional semantics and theorem provers
+  \item e.g. from `Kim is a bachelor', we can construct the LF
+    $\pred{bachelor}(\mbox{Kim})$ and then deduce 
+    $\pred{unmarried}(\mbox{Kim})$
+  \item Problematic in general, OK for narrow domains or micro-worlds.
+  \end{itemize}
+\end{frame} 
+
 \begin{frame}{Examples to think about}
   \begin{itemize}
   \item tomato
@@ -358,6 +373,7 @@ Dictionaries are not consistent.
 
 \section{Word sense disambiguation}
 
+
 \begin{frame}{Word sense disambiguation}
 
 Needed for many applications, problematic for large domains.\\
@@ -477,6 +493,35 @@ Once a very common research topic, now less studied:
   \vfill
   More at\\ \small{\url{https://plato.stanford.edu/entries/word-meaning/}}
 \end{frame}
+
+\begin{frame}{Vector space semantics}
+  \includegraphics[height=0.6\textheight]{figures/vector-space}
+  \begin{itemize}
+  \item The core of today's NLP
+  \item Are word vectors semantic representations?
+  \item Yes, but not necessarily compositional
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Word senses and Word sense disambiguation}
+  \begin{itemize}
+  \item A problem from which word vectors arise
+  \item How close/distinct are the senses of two words?
+  \item How to determine this computationally? \pause
+    \begin{itemize}
+    \item See which contexts they appear in: N-grams! (or, these days,
+      word vectors) $\to$ Compute distance $\to$ Closer distance $=$
+      closer meaning?
+    \end{itemize}
+  \item What is one problem with this?  \pause
+      \begin{itemize}
+      \item This place is very \textbf{loud}
+      \item This place is very \textbf{quiet}
+      \end{itemize}
+    \item Antonyms tend to occur in the same context
+  \end{itemize}
+\end{frame}
+
 
 \end{document}
 
