@@ -1,15 +1,12 @@
 #+title: Introdução ao Processamento de Linguagem Natural
 #+author: Alexandre Rademaker
 
-https://github.com/emap-nlp
 
-* Monitoria
+* Info
   
-Monitoria: Sexta 14:20 - 16:20 (@yfaria)
-
-* Forum
-
-  https://github.com/orgs/emap-nlp/teams/students
+- Monitoria: Sexta 14:20 - 16:20 (@yfaria)
+- Forum https://github.com/orgs/emap-nlp/teams/students
+- site https://github.com/emap-nlp
 
 * aula 1 <2021-08-02 Mon>
 
@@ -159,15 +156,37 @@ Monitoria: Sexta 14:20 - 16:20 (@yfaria)
 
 * aula 21 <2021-10-27 Wed>
 
-  - semântica lexical 
+  - semântica lexical
+
+* aula 22 <2021-11-03 Wed>
+
+  - discussão sobre último assignment
+
+* aula 23 <2021-11-08 Mon>
+
+  - interfaces de busca em documentos:
+    - google (web search)
+    - http://openwordnet-pt.org (interface de busca sobre a Wordnet)
+    - buscas em dados estruturados http://wikidata.org
+    - buscas em artigos e autores https://aclanthology.org e https://dblp.org
+    - http://dhbb.mybluemix.net/dhbb/home demo DHBB. Falamos sobre
+      quais outras funcionalidades seriam possíveis para busca não
+      apenas usando o texto e metadados, mas também camadas de
+      anotação extraídas do processamento dos textos (relações
+      familiares do último projeto, wordnet, relações sintáticas,
+      eventos, datas etc)
+    - http://aclasb.dfki.de - interfaces especializadas
+    - sistemas de busca/indexação normalmente usados como backend
+      https://solr.apache.org e https://www.elastic.co/guide/index.html 
 
 * Referencias
 
-  - https://web.stanford.edu/~jurafsky/slp3/
+  - https://web.stanford.edu/~jurafsky/slp3/  - parte NLP
+  - https://nlp.stanford.edu/IR-book/ - parte IR
+    
   - https://www.morganclaypool.com/doi/abs/10.2200/S00493ED1V01Y201303HLT020
   - https://www.morganclaypool.com/doi/abs/10.2200/S00935ED1V02Y201907HLT043
   - https://press.uchicago.edu/ucp/books/book/distributed/F/bo3613750.html
-
   - https://staff.fnwi.uva.nl/d.j.n.vaneijck2/cs/
   - http://www.portaldalinguaportuguesa.org
   - https://olzama.github.io/CL-seminar/annotated_bib.html
@@ -177,7 +196,9 @@ Monitoria: Sexta 14:20 - 16:20 (@yfaria)
   - https://www.cl.cam.ac.uk/teaching/1920/NLP/materials.html  (curso que vamos seguir)
   - https://www.cl.cam.ac.uk/teaching/1415/NLP/materials.html
   - https://sites.pitt.edu/~naraehan/ling1330/index.html
-  - https://www.youtube.com/c/INF4820 
+  - https://bond-lab.github.io/Computational-Lexical-Semantics/
+  - https://www.youtube.com/c/INF4820
+  - https://github.com/fccoelho/curso-IRI
       
 * Libraries
 
